@@ -19,7 +19,7 @@ export interface Response<DataType = Data> {
 }
 
 const queryParams = (params: {[Key: string]: string}) => {
-  let query = [];
+  let query: string[] = [];
   _.forIn(params, (value, key) => {
     if (value) query.push(`${key}=${value}`);
   })
@@ -31,8 +31,8 @@ const getList = <DataType = Data>(
   params: any
 ): Promise<DataType[] | ListResponse<DataType>> => {
   const query = queryParams(params);
-  if (query === '' && !resource.includes('reviews')) return;
-  const url = `/${resource}?${query}`;
+  const queryString = query === '' ? '' : `?${query}`;
+  const url = `/${resource}${queryString}`;
   return apiClient.get(url).then(({ data }) => {
     return data as DataType[];
   });
@@ -40,12 +40,13 @@ const getList = <DataType = Data>(
 
 const getOne = <DataType = Data>(
   resource: string,
-  id: string,
-  params: any
+  id: string | null | undefined,
+  params: any,
 ): Promise<DataType | Response<DataType>> => {
   if (!id) return;
-  const query = '' // queryParams(resource, params);
-  const url = `/${resource}/${id}?${query}`;
+  const query = queryParams(params);
+  const queryString = query === '' ? '' : `?${query}`;
+  const url = `/${resource}/${id}${queryString}`;
   return apiClient.get(url).then(({ data }) => {
     return data as DataType;
   });

@@ -11,6 +11,7 @@ export default interface Recipe {
   likes: number;
   missedIngredients?: Ingredient[];
   usedIngredients?: Ingredient[];
+  extendedIngredients?: Ingredient[];
   readyInMinutes?: number;
   servings?: number;
   summary?: string;

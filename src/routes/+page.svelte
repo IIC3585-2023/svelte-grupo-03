@@ -12,9 +12,11 @@
   let curPage = 1;
   let offset = 0;
   let total = 0;
+  let sort: 'random' | 'time' | 'protein' = 'random';
+  let sortDirection: 'asc' | 'desc' = 'asc';
   const number = 20;
   $: pages = _.ceil(total/number);
-  $: page = offset/number + 1;
+  $: pageFromQuery = offset/number + 1;
 
   $: searchParams = {
     query: searchText,
@@ -49,8 +51,8 @@
       </h1>
     </div>
   </div>
-  <section class="px-5 sm:px-16 lg:px-32">
-    <div class="flex mb-10">
+  <section class="flex flex-col gap-10 px-5 sm:px-16 lg:px-32">
+    <div class="flex">
       <SearchBar bind:search={searchText} />
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -60,7 +62,7 @@
     </div>
     <Pagination 
       pages={pages}
-      page={page}
+      page={pageFromQuery}
       size={number}
       total={total}
       bind:curPage

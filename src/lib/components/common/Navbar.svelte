@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Bookmark } from '@steeze-ui/heroicons';
+  import { Icon } from '@steeze-ui/svelte-icon';
 </script>
 
 <header class="bg-white shadow-sm lg:static lg:overflow-y-visible">
@@ -11,6 +13,9 @@
           </a>
         </div>
       </div>
+      <a href="/my_recipes" class="p-2 text-white bg-amber-900 rounded-full hover:bg-amber-800">
+        <Icon src="{Bookmark}" class="w-5 h-5" theme="solid"/>
+      </a>
     </div>
   </div>
 </header>

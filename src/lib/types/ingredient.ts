@@ -14,4 +14,5 @@ export interface Ingredient {
   meta: string[];
   image: string;
   consistency?: string;
+  measures: { metric: { amount: number; unitShort: string; unitLong: string } }
 }

@@ -1,21 +1,24 @@
 <script lang="ts">
   import { useQuery } from "@sveltestack/svelte-query";
   import { makeResourceQuery } from "../lib/queries";
-	import type Recipe from "$lib/types/recipe";
+	import type Recipe from "../lib/types/recipe";
 	import SearchBar from "$lib/components/SearchBar.svelte";
   import jsonResults from '../hardcodedApi/complexSearch.json';
 	import RecipeCard from "$lib/components/RecipeCard.svelte";
 	import Pagination from "$lib/components/common/Pagination.svelte";
   import _ from 'lodash';
+  import LoadingIcon from '../lib/components/common/LoadingIcon.svelte';
 
   let searchText = '';
   let curPage = 1;
   let offset = 0;
   let total = 0;
+
   const number = 20;
   $: pages = _.ceil(total/number);
-  $: page = offset/number + 1;
+  $: pageFromQuery = offset/number + 1;
 
+  let searchParams;
   $: searchParams = {
     query: searchText,
     addRecipeInformation: true,
@@ -23,7 +26,6 @@
     offset: (curPage - 1) * number,
   }
 
-  /*
   const searchRecipesQuery = useQuery(
     makeResourceQuery<Recipe>('recipes/complexSearch', searchParams)
   );
@@ -33,10 +35,6 @@
   $: searchRecipes = $searchRecipesQuery.data?.results || [];
   $: total = $searchRecipesQuery.data?.totalResults || [];
   $: offset = $searchRecipesQuery.data?.offset || [];
-  */
-
-  let searchRecipes = jsonResults.results;
-  $: console.log(searchRecipes);
 </script>
 
 <div class="flex flex-col gap-10 w-full mb-32">
@@ -49,18 +47,24 @@
       </h1>
     </div>
   </div>
-  <section class="px-5 sm:px-16 lg:px-32">
-    <div class="flex mb-10">
+  <section class="flex flex-col justify-center gap-10 px-5 sm:px-16 lg:px-32">
+    <div class="flex">
       <SearchBar bind:search={searchText} />
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-      {#each searchRecipes as recipe (recipe.id)}
-        <RecipeCard {recipe} />
-      {/each}
-    </div>
-    <Pagination 
+    {#if $searchRecipesQuery.isLoading}
+      <span class="animate-spin mr-2 w-10 h-10">
+        <LoadingIcon />
+      </span>
+    {:else}
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+        {#each searchRecipes as recipe (recipe.id)}
+          <RecipeCard {recipe} />
+        {/each}
+      </div>
+    {/if}
+    <Pagination
       pages={pages}
-      page={page}
+      page={pageFromQuery}
       size={number}
       total={total}
       bind:curPage

@@ -8,7 +8,7 @@ export const makeResourceQuery = <ResType extends AnyResource = AnyResource>(
   resource: string,
   queryParams?: any
 ): UseQueryOptions<ListResponse<ResType>> => ({
-  queryKey: [resource],
+  queryKey: [resource, queryParams],
   queryFn: () => dataProvider.getList<ResType>(resource, queryParams),
 })
 
@@ -34,8 +34,9 @@ export const makeSimilarQuery = <ResType extends AnyResource = AnyResource>(
 ): UseQueryOptions<ResType> => ({
   queryKey: ['similar', id],
   queryFn: () => {
+    if (!id) return;
     return dataProvider
-      .getOne('recipes/similar', id as string, queryParams || {})
+      .getOne('recipes', `${id}/similar` as string, queryParams || {})
       .then((data) => {
         return data as unknown as ResType
       })},

@@ -9,7 +9,6 @@
   const similarRecipesQuery = useQuery(makeSimilarQuery<Recipe>(recipeId));
   $: similarRecipesQuery.setOptions(makeSimilarQuery<Recipe>(recipeId));
   $: similarRecipes = $similarRecipesQuery.data || [];
-  $: console.log(similarRecipes);
 </script>
 
 {#if $similarRecipesQuery.isLoading}

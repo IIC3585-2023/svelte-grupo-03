@@ -3,7 +3,6 @@
   import { makeResourceQuery } from "../lib/queries";
 	import type Recipe from "../lib/types/recipe";
 	import SearchBar from "$lib/components/SearchBar.svelte";
-  import jsonResults from '../hardcodedApi/complexSearch.json';
 	import RecipeCard from "$lib/components/RecipeCard.svelte";
 	import Pagination from "$lib/components/common/Pagination.svelte";
   import _ from 'lodash';
